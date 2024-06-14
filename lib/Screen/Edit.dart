@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled1/Screen/Unlogin.dart';
+import 'package:untitled1/main.dart';
 
 class EditScreen extends StatefulWidget {
   final String username;
@@ -33,6 +34,17 @@ class _EditScreenState extends State<EditScreen> {
     Navigator.pop(context);
   }
 
+  void _deleteUsername(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('username');
+    await prefs.setBool('isLogged', false);
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const MyHomePage(title: 'login')),
+      (route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,6 +69,12 @@ class _EditScreenState extends State<EditScreen> {
               ElevatedButton(
                 onPressed: _cancelEdit,
                 child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _deleteUsername(context);
+                },
+                child: const Text('Delete username'),
               ),
             ],
           ),

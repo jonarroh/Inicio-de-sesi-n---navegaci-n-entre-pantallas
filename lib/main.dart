@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'login',
-      home: MyHomePage(title: 'Shared preferences demo'),
+      home: MyHomePage(title: 'login'),
     );
   }
 }
@@ -46,8 +46,8 @@ class _MyHomePageState extends State<MyHomePage> {
     if (_isLogged) {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => UnloginComponent()),
-        (route) => false,
+        MaterialPageRoute(builder: (context) =>  UnloginComponent()),
+            (route) => false,
       );
     }
   }
@@ -82,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const UnloginComponent()),
-        (route) => false,
+            (route) => false,
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -128,8 +128,18 @@ class LoginComponente extends StatefulWidget {
 
 class _LoginComponenteState extends State<LoginComponente> {
   String username = '';
-  int password = 0;
+  int? password;
   bool saveSession = false;
+
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _usernameController.text = username;
+    _passwordController.text = password?.toString() ?? '';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +148,7 @@ class _LoginComponenteState extends State<LoginComponente> {
       child: Column(
         children: [
           TextField(
+            controller: _usernameController,
             autofocus: true,
             decoration: const InputDecoration(
               hintText: 'Username',
@@ -149,6 +160,7 @@ class _LoginComponenteState extends State<LoginComponente> {
             },
           ),
           TextField(
+            controller: _passwordController,
             obscureText: true,
             decoration: const InputDecoration(
               hintText: 'Password',
@@ -174,7 +186,7 @@ class _LoginComponenteState extends State<LoginComponente> {
           ),
           ElevatedButton(
             onPressed: () {
-              widget.onLogin(username, password, saveSession);
+              widget.onLogin(username, password!, saveSession);
             },
             child: const Text('Login'),
           ),
@@ -182,9 +194,12 @@ class _LoginComponenteState extends State<LoginComponente> {
             onPressed: () {
               setState(() {
                 username = '';
-                password = 0;
+                password = null;
                 saveSession = false;
+                _usernameController.clear();
+                _passwordController.clear();
               });
+              widget.clear();
             },
             child: const Text('Borrar'),
           )

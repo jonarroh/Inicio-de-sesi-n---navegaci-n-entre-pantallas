@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled1/Screen/Edit.dart';
 import 'package:untitled1/main.dart';
-import 'Edit.dart'; // Importa la nueva pantalla
 
 class UnloginComponent extends StatefulWidget {
-
-
   const UnloginComponent({super.key});
 
   @override
@@ -31,8 +28,7 @@ class _UnloginComponentState extends State<UnloginComponent> {
     await prefs.setBool('isLogged', false);
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Shared preferences demo')
-
+      MaterialPageRoute(builder: (context) => const MyHomePage(title: 'login')
       )
         , (route) => false
     );
